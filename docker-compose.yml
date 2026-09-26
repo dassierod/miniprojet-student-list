@@ -1,0 +1,29 @@
+services:
+
+  api:
+    image: student-list-api:v1
+    container_name: student-api-compose
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./simple_api/student_age.json:/data/student_age.json
+    networks:
+      - student-network
+  website:
+    image: php:apache
+    container_name: student-website
+    environment:
+      USERNAME: toto
+      PASSWORD: python
+    volumes:
+      - ./website:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+    networks:
+      - student-network
+
+networks:
+  student-network:
+    driver: bridge
